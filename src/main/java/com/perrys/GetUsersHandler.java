@@ -45,7 +45,7 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
             jsonUsersList.add(Integer.toString(i), jsonUser);
         }
 
-        GatewayResponse response = new GatewayResponse(jsonUsersList.getAsString(), 200);
+        GatewayResponse response = new GatewayResponse(jsonUsersList.toString(), 200);
         return response;
     }
 
