@@ -11,25 +11,25 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.perrys.GatewayResponse;
-import com.perrys.RequestObjects.User;
+import com.perrys.RequestObjects.UserRequest;
 
 import java.util.UUID;
 
-public class CreateUserHandler implements RequestHandler<User, GatewayResponse> {
+public class CreateUserHandler implements RequestHandler<UserRequest, GatewayResponse> {
     private DynamoDB dynamoDB;
     private String DYNAMODB_TABLE_NAME = "Users";
     private Regions REGION = Regions.EU_WEST_1; // TODO: Update with correct region
 
     @Override
-    public GatewayResponse handleRequest(User user, Context context)
+    public GatewayResponse handleRequest(UserRequest userRequest, Context context)
     {
         this.initDynamoDbClient();
-        persistData(user);
-        GatewayResponse personResponse = new GatewayResponse("User created", 200);
+        persistData(userRequest);
+        GatewayResponse personResponse = new GatewayResponse("UserRequest created", 200);
         return personResponse;
     }
 
-    private PutItemOutcome persistData(User userRequest)
+    private PutItemOutcome persistData(UserRequest userRequest)
             throws ConditionalCheckFailedException
     {
         // Get the table from the DB object
