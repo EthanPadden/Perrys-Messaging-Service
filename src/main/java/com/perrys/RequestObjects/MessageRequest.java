@@ -1,11 +1,11 @@
-package com.perrys;
+package com.perrys.RequestObjects;
 
-public class Message {
+public class MessageRequest {
     private String senderUserId;
     private String recipientUserId;
     private String body;
 
-    public Message()
+    public MessageRequest()
     {
     }
 

@@ -1,11 +1,11 @@
-package com.perrys;
+package com.perrys.RequestObjects;
 
 import java.util.UUID;
 
-public class User {
+public class UserRequest {
     private String username;
 
-    public User()
+    public UserRequest()
     {
     }
 

@@ -3,21 +3,21 @@ package com.perrys;
 import java.util.Map;
 
 public class GatewayResponse {
-    private String body;
+    private Object body;
     private Integer statusCode;
 
-    public GatewayResponse(String body, Integer statusCode)
+    public GatewayResponse(Object body, Integer statusCode)
     {
         this.body = body;
         this.statusCode = statusCode;
     }
 
-    public String getBody()
+    public Object getBody()
     {
         return body;
     }
 
-    public void setBody(String body)
+    public void setBody(Object body)
     {
         this.body = body;
     }
