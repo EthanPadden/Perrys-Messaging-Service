@@ -1,4 +1,4 @@
-package com.perrys;
+package com.perrys.RequestObjects;
 
 public class ConversationRequest {
     private String userId1;

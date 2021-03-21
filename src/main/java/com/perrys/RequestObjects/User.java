@@ -1,4 +1,4 @@
-package com.perrys;
+package com.perrys.RequestObjects;
 
 import java.util.UUID;
 

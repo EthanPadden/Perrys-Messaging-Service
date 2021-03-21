@@ -1,32 +1,48 @@
-package com.perrys;
+package com.perrys.RequestHandlers;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.JsonObject;
+import com.perrys.GatewayResponse;
+import com.perrys.RequestObjects.ConversationRequest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GetMessagesHandler implements RequestHandler<Object, GatewayResponse> {
+public class GetConversationHandler implements RequestHandler<ConversationRequest, GatewayResponse> {
     private DynamoDB dynamoDB;
     private AmazonDynamoDBClient client;
     private String DYNAMODB_TABLE_NAME = "Messages";
     private Regions REGION = Regions.EU_WEST_1;
 
     @Override
-    public GatewayResponse handleRequest(Object o, Context context)
+    public GatewayResponse handleRequest(ConversationRequest conversationRequest, Context context)
     {
         this.initDynamoDbClient();
-        ScanRequest scanRequest = new ScanRequest().withTableName(DYNAMODB_TABLE_NAME);
-        ScanResult scanResult = client.scan(scanRequest);
+        Map<String, AttributeValue> expressionAttributeValues =
+                new HashMap<String, AttributeValue>();
+        expressionAttributeValues.put(":id1", new AttributeValue().withS(conversationRequest.getUserId1()));
+        expressionAttributeValues.put(":id2", new AttributeValue().withS(conversationRequest.getUserId2()));
+
+        String filterExpression =
+                "senderUserId = :id1"
+                        + " OR senderUserId = :id2"
+                        + " OR recipientUserId = :id1"
+                        + " OR recipientUserId = :id2";
+
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName("Messages")
+                .withFilterExpression(filterExpression)
+                .withExpressionAttributeValues(expressionAttributeValues);
+        ScanResult scanResult =  client.scan(scanRequest);
         List<Map<String, AttributeValue>> items = scanResult.getItems();
         JsonObject jsonMessageList = new JsonObject();
         for (int i = 0; i < items.size(); i++) {
@@ -44,7 +60,6 @@ public class GetMessagesHandler implements RequestHandler<Object, GatewayRespons
             jsonMessage.addProperty("senderUserId", senderUserId);
             jsonMessageList.add(Integer.toString(i), jsonMessage);
         }
-
         GatewayResponse response = new GatewayResponse(jsonMessageList.toString(), 200);
         return response;
     }

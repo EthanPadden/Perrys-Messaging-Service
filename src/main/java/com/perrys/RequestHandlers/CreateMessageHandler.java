@@ -1,33 +1,36 @@
-package com.perrys;
+package com.perrys.RequestHandlers;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
+import com.perrys.GatewayResponse;
+import com.perrys.RequestObjects.Message;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
-public class CreateUserHandler implements RequestHandler<User, GatewayResponse> {
+public class CreateMessageHandler implements RequestHandler<Message, GatewayResponse> {
     private DynamoDB dynamoDB;
-    private String DYNAMODB_TABLE_NAME = "Users";
-    private Regions REGION = Regions.EU_WEST_1; // TODO: Update with correct region
+    private String DYNAMODB_TABLE_NAME = "Messages";
+    private Regions REGION = Regions.EU_WEST_1;
 
     @Override
-    public GatewayResponse handleRequest(User user, Context context)
+    public GatewayResponse handleRequest(Message message, Context context)
     {
         this.initDynamoDbClient();
-        persistData(user);
-        GatewayResponse personResponse = new GatewayResponse("User created", 200);
+        persistData(message);
+        GatewayResponse personResponse = new GatewayResponse("Message created", 200);
         return personResponse;
     }
 
-    private PutItemOutcome persistData(User userRequest)
+    private PutItemOutcome persistData(Message messageRequest)
             throws ConditionalCheckFailedException
     {
         // Get the table from the DB object
@@ -36,14 +39,23 @@ public class CreateUserHandler implements RequestHandler<User, GatewayResponse> 
         // Generate a random UUID as a string
         String uuid = UUID.randomUUID().toString(); // TODO: move to empty constructor and set as member variable?
 
+        // Get current timestamp
+        // TODO: move to empty constructor and set as member variable?
+        Timestamp timestampObj = new Timestamp(System.currentTimeMillis());
+//        String timestampStr = Long.toString(timestampObj.getTime());
+        long timestamp = timestampObj.getTime();
         try {
-            System.out.println("Creating user in database...");
+            System.out.println("Creating message in database...");
             PutItemOutcome outcome = table
-                    .putItem(new Item().withPrimaryKey("userId", uuid).withString("username", userRequest.getUsername()));
+                    .putItem(new Item().withPrimaryKey("messageId", uuid)
+                            .withString("senderUserId", messageRequest.getSenderUserId())
+                            .withString("recipientUserId", messageRequest.getRecipientUserId())
+                            .withNumber("timestamp", timestamp)
+                            .withString("body", messageRequest.getBody()));
             System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
             return outcome;
         } catch (Exception e) {
-            System.err.println("Unable to add item: " + userRequest.getUsername());
+            System.err.println("Unable to add message");
             System.err.println(e.getMessage());
             return null; // TODO: throw custom exception here and handle response in handleRequest - set status code accordingly
         }

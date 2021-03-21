@@ -1,4 +1,4 @@
-package com.perrys;
+package com.perrys.RequestHandlers;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -6,13 +6,11 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
-import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-
-import java.sql.Timestamp;
-import java.util.UUID;
+import com.perrys.GatewayResponse;
+import com.perrys.RequestObjects.UpdateMessage;
 
 public class UpdateMessageHandler implements RequestHandler<UpdateMessage, GatewayResponse> {
     private DynamoDB dynamoDB;

@@ -1,4 +1,4 @@
-package com.perrys;
+package com.perrys.RequestHandlers;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.perrys.GatewayResponse;
 
 public class DeleteMessageHandler implements RequestHandler<String, GatewayResponse> {
     private DynamoDB dynamoDB;
