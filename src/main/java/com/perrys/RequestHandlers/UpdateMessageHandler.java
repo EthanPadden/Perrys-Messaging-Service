@@ -48,10 +48,12 @@ public class UpdateMessageHandler implements RequestHandler<UpdateMessageRequest
             table.updateItem(updateItemSpec);
 
             response = new GatewayResponse("Message updated", 200);
+        } catch (IllegalArgumentException e) {
+            response = new GatewayResponse("There was an error in the input", 400);
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database: ", 500);
+            response = new GatewayResponse("There was an error accessing the database", 500);
         }
-        
+
         return response;
     }
 }

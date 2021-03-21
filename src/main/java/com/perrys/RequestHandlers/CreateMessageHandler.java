@@ -54,8 +54,10 @@ public class CreateMessageHandler implements RequestHandler<MessageRequest, Gate
 
             response = new GatewayResponse("Message created", 200);
 
+        } catch (IllegalArgumentException e) {
+            response = new GatewayResponse("There was an error in the input", 400);
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database: ", 500);
+            response = new GatewayResponse("There was an error accessing the database", 500);
         }
 
         return response;

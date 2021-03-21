@@ -40,8 +40,10 @@ public class DeleteMessageHandler implements RequestHandler<String, GatewayRespo
             table.deleteItem(deleteItemSpec);
 
             response = new GatewayResponse("Message deleted", 200);
+        } catch (IllegalArgumentException e) {
+            response = new GatewayResponse("There was an error in the input", 400);
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database: ", 500);
+            response = new GatewayResponse("There was an error accessing the database", 500);
         }
 
         return response;

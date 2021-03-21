@@ -73,6 +73,8 @@ public class GetConversationHandler implements RequestHandler<ConversationReques
             }
 
             response = new GatewayResponse(jsonMessageList.toString(), 200);
+        } catch (IllegalArgumentException e) {
+            response = new GatewayResponse("There was an error in the input", 400);
         } catch (Exception e) {
             response = new GatewayResponse("There was an error accessing the database", 500);
         }
