@@ -26,9 +26,6 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
     @Override
     public GatewayResponse handleRequest(Object o, Context context)
     {
-        // Create empty arraylist for users retrieved
-        List<UserResponse> usersRetrieved = new ArrayList<>();
-
         // Create response object
         GatewayResponse response;
 
@@ -44,14 +41,17 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
             List<Map<String, AttributeValue>> items = scanResult.getItems();
 
             // Populate arraylist of UserResponse objects to send in HTTP response
-            for (Map<String, AttributeValue> userItem : items) {
-                String userId = userItem.get("userId").toString();
-                String username = userItem.get("username").toString();
-                UserResponse userResponse = new UserResponse(userId, username);
-                usersRetrieved.add(userResponse);
+            JsonObject jsonUsersList = new JsonObject();
+            for (int i = 0; i < items.size(); i++) {
+                String userId = items.get(i).get("userId").toString();
+                String username = items.get(i).get("username").toString();
+                JsonObject jsonUser = new JsonObject();
+                jsonUser.addProperty("userId", userId);
+                jsonUser.addProperty("username", username);
+                jsonUsersList.add(Integer.toString(i), jsonUser);
             }
 
-            response = new GatewayResponse(usersRetrieved, 200);
+            response = new GatewayResponse(jsonUsersList.toString(), 200);
         } catch (Exception e) {
             response = new GatewayResponse("There was an error accessing the database", 500);
         }
