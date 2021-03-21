@@ -20,41 +20,38 @@ public class UpdateMessageHandler implements RequestHandler<UpdateMessageRequest
     @Override
     public GatewayResponse handleRequest(UpdateMessageRequest message, Context context)
     {
-        this.initDynamoDbClient();
-        updateData(message.getMessageId(), message.getBody());
-        GatewayResponse personResponse = new GatewayResponse("Message updated", 200);
-        return personResponse;
-    }
-
-    private UpdateItemOutcome updateData(String messageId, String newMessageBody)
-    {
-        // Get the table from the DB object
-        Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
-
-        String updateExpn = "set body = :b";
-        ValueMap valueMap = new ValueMap().withString(":b", newMessageBody);
-        UpdateItemSpec updateItemSpec = new UpdateItemSpec()
-                .withPrimaryKey("messageId", messageId)
-                .withUpdateExpression(updateExpn)
-                .withValueMap(valueMap)
-                .withReturnValues(ReturnValue.UPDATED_NEW);
+        // Create response object
+        GatewayResponse response;
 
         try {
-            System.out.println("Updating the item...");
-            UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
-            System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
-            return outcome;
-        } catch (Exception e) {
-            System.err.println("Unable to update item");
-            System.err.println(e.getMessage());
-            return null;
-        }
-    }
+            // Initialise DynamoDB client
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            client.setRegion(Region.getRegion(REGION));
+            this.dynamoDB = new DynamoDB(client);
 
-    private void initDynamoDbClient()
-    {
-        AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        client.setRegion(Region.getRegion(REGION));
-        this.dynamoDB = new DynamoDB(client);
+            // Get the table from the DB object
+            Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
+
+            // Cannot use literals in update expression
+            // Use value map to map values
+            String updateExpn = "set body = :b";
+            ValueMap valueMap = new ValueMap().withString(":b", message.getBody());
+
+            // Build updateItemSpsc
+            UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+                    .withPrimaryKey("messageId", message.getMessageId())
+                    .withUpdateExpression(updateExpn)
+                    .withValueMap(valueMap)
+                    .withReturnValues(ReturnValue.UPDATED_NEW);
+
+            // Update item in database
+            table.updateItem(updateItemSpec);
+
+            response = new GatewayResponse("Message updated", 200);
+        } catch (Exception e) {
+            response = new GatewayResponse("There was an error accessing the database: ", 500);
+        }
+        
+        return response;
     }
 }
