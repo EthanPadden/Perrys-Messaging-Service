@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -50,8 +51,14 @@ public class UpdateMessageHandler implements RequestHandler<UpdateMessageRequest
             response = new GatewayResponse("Message updated", 200);
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse("There was an error in the input", 400);
+        }  catch (AmazonDynamoDBException e) {
+            if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
+                response = new GatewayResponse("There was an error in the input", 400);
+            } else {
+                response = new GatewayResponse("There was an error accessing the database", 500);
+            }
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database", 500);
+            response = new GatewayResponse("There was an error accessing the database: " + e.getClass(), 500);
         }
 
         return response;

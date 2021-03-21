@@ -4,6 +4,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
@@ -75,6 +76,12 @@ public class GetConversationHandler implements RequestHandler<ConversationReques
             response = new GatewayResponse(jsonMessageList.toString(), 200);
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse("There was an error in the input", 400);
+        } catch (AmazonDynamoDBException e) {
+            if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
+                response = new GatewayResponse("There was an error in the input", 400);
+            } else {
+                response = new GatewayResponse("There was an error accessing the database", 500);
+            }
         } catch (Exception e) {
             response = new GatewayResponse("There was an error accessing the database", 500);
         }
