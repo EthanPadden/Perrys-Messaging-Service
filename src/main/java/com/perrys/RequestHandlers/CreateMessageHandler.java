@@ -5,24 +5,22 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.perrys.GatewayResponse;
-import com.perrys.RequestObjects.Message;
+import com.perrys.RequestObjects.MessageRequest;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class CreateMessageHandler implements RequestHandler<Message, GatewayResponse> {
+public class CreateMessageHandler implements RequestHandler<MessageRequest, GatewayResponse> {
     private DynamoDB dynamoDB;
     private String DYNAMODB_TABLE_NAME = "Messages";
     private Regions REGION = Regions.EU_WEST_1;
 
     @Override
-    public GatewayResponse handleRequest(Message message, Context context)
+    public GatewayResponse handleRequest(MessageRequest messageRequest, Context context)
     {
         // Create response object
         GatewayResponse response;
@@ -46,10 +44,10 @@ public class CreateMessageHandler implements RequestHandler<Message, GatewayResp
 
             Item newMessageDBItem = new Item()
                     .withPrimaryKey("messageId", uuid)
-                    .withString("senderUserId", message.getSenderUserId())
-                    .withString("recipientUserId", message.getRecipientUserId())
+                    .withString("senderUserId", messageRequest.getSenderUserId())
+                    .withString("recipientUserId", messageRequest.getRecipientUserId())
                     .withNumber("timestamp", timestamp)
-                    .withString("body", message.getBody());
+                    .withString("body", messageRequest.getBody());
 
             // Put item into table
             table.putItem(newMessageDBItem);
