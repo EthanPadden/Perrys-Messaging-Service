@@ -1,10 +1,10 @@
 package com.perrys.RequestObjects;
 
-public class UpdateMessage {
+public class UpdateMessageRequest {
     private String messageId;
     private String body;
 
-    public UpdateMessage()
+    public UpdateMessageRequest()
     {
     }
 

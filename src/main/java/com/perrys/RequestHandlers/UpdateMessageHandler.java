@@ -10,15 +10,15 @@ import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.perrys.GatewayResponse;
-import com.perrys.RequestObjects.UpdateMessage;
+import com.perrys.RequestObjects.UpdateMessageRequest;
 
-public class UpdateMessageHandler implements RequestHandler<UpdateMessage, GatewayResponse> {
+public class UpdateMessageHandler implements RequestHandler<UpdateMessageRequest, GatewayResponse> {
     private DynamoDB dynamoDB;
     private String DYNAMODB_TABLE_NAME = "Messages";
     private Regions REGION = Regions.EU_WEST_1;
 
     @Override
-    public GatewayResponse handleRequest(UpdateMessage message, Context context)
+    public GatewayResponse handleRequest(UpdateMessageRequest message, Context context)
     {
         this.initDynamoDbClient();
         updateData(message.getMessageId(), message.getBody());
