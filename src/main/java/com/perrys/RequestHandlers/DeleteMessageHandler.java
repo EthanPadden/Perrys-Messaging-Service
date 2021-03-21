@@ -20,37 +20,30 @@ public class DeleteMessageHandler implements RequestHandler<String, GatewayRespo
     @Override
     public GatewayResponse handleRequest(String messageId, Context context)
     {
-        this.initDynamoDbClient();
-        GatewayResponse personResponse = new GatewayResponse("Message updated", 200);
-        deleteData(messageId);
-        return personResponse;
-    }
-
-    private DeleteItemOutcome deleteData(String messageId)
-    {
-        // Get the table from the DB object
-        Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
-
-        DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
-                .withPrimaryKey(new PrimaryKey("messageId", messageId));
+        // Create response object
+        GatewayResponse response;
 
         try {
-            System.out.println("Attempting a conditional delete...");
-            DeleteItemOutcome deleteItemOutcome = table.deleteItem(deleteItemSpec);
-            System.out.println("DeleteItem succeeded");
-            return deleteItemOutcome;
-        }
-        catch (Exception e) {
-            System.err.println("Unable to delete item");
-            System.err.println(e.getMessage());
-            return null;
-        }
-    }
+            // Initialise DynamoDB client
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            client.setRegion(Region.getRegion(REGION));
+            this.dynamoDB = new DynamoDB(client);
 
-    private void initDynamoDbClient()
-    {
-        AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        client.setRegion(Region.getRegion(REGION));
-        this.dynamoDB = new DynamoDB(client);
+            // Get the table from the DB object
+            Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
+
+            // Build deleteItemSpec
+            DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
+                    .withPrimaryKey(new PrimaryKey("messageId", messageId));
+
+            // Delete item from database
+            table.deleteItem(deleteItemSpec);
+
+            response = new GatewayResponse("Message deleted", 200);
+        } catch (Exception e) {
+            response = new GatewayResponse("There was an error accessing the database: ", 500);
+        }
+
+        return response;
     }
 }
