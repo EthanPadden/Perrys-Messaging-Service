@@ -44,7 +44,7 @@ public class GetMessagesHandler implements RequestHandler<Object, GatewayRespons
             for (Map<String, AttributeValue> item : items) {
                 try {
                     String messageId = item.get("messageId").getS();
-                    String timestamp = item.get("timestamp").getS();
+                    String timestamp = item.get("timestamp").getN();
                     String body = item.get("body").getS();
                     String recipientUserId = item.get("recipientUserId").getS();
                     String senderUserId = item.get("senderUserId").getS();
