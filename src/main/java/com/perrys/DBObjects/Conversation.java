@@ -1,10 +1,10 @@
-package com.perrys.RequestObjects;
+package com.perrys.DBObjects;
 
-public class ConversationRequest {
+public class Conversation {
     private String userId1;
     private String userId2;
 
-    public ConversationRequest()
+    public Conversation()
     {
     }
 

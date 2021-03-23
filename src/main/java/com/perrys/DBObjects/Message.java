@@ -1,11 +1,13 @@
-package com.perrys.RequestObjects;
+package com.perrys.DBObjects;
 
-public class MessageRequest {
+public class Message {
     private String senderUserId;
     private String recipientUserId;
     private String body;
+    private String messageId;
+    private long timestamp;
 
-    public MessageRequest()
+    public Message()
     {
     }
 
@@ -37,5 +39,25 @@ public class MessageRequest {
     public void setBody(String body)
     {
         this.body = body;
+    }
+
+    public String getMessageId()
+    {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId)
+    {
+        this.messageId = messageId;
+    }
+
+    public long getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp)
+    {
+        this.timestamp = timestamp;
     }
 }

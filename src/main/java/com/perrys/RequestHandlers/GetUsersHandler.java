@@ -3,7 +3,6 @@ package com.perrys.RequestHandlers;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
@@ -12,9 +11,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.perrys.GatewayResponse;
-import com.perrys.ResponseObjects.UserResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +53,7 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
                 }
             }
 
-            response = new GatewayResponse(jsonUsersList.toString(), 200);
+            response = new GatewayResponse(jsonUsersList, 200);
         } catch (Exception e) {
             response = new GatewayResponse("There was an error accessing the database", 500);
         }

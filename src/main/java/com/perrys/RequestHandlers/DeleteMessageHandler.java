@@ -5,22 +5,19 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
-import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
-import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
-import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.perrys.DBObjects.Message;
 import com.perrys.GatewayResponse;
-import com.perrys.RequestObjects.UpdateMessageRequest;
 
-public class DeleteMessageHandler implements RequestHandler<UpdateMessageRequest, GatewayResponse> {
+public class DeleteMessageHandler implements RequestHandler<Message, GatewayResponse> {
     private DynamoDB dynamoDB;
     private String DYNAMODB_TABLE_NAME = "Messages";
     private Regions REGION = Regions.EU_WEST_1;
 
     @Override
-    public GatewayResponse handleRequest(UpdateMessageRequest message, Context context)
+    public GatewayResponse handleRequest(Message message, Context context)
     {
         // Create response object
         GatewayResponse response;
@@ -41,7 +38,7 @@ public class DeleteMessageHandler implements RequestHandler<UpdateMessageRequest
             // Delete item from database
             table.deleteItem(deleteItemSpec);
 
-            response = new GatewayResponse("Message deleted", 200);
+            response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse("There was an error in the input", 400);
         }  catch (AmazonDynamoDBException e) {

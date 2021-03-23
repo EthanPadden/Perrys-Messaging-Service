@@ -3,7 +3,6 @@ package com.perrys.RequestHandlers;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
@@ -13,19 +12,19 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.perrys.GatewayResponse;
-import com.perrys.RequestObjects.ConversationRequest;
+import com.perrys.DBObjects.Conversation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GetConversationHandler implements RequestHandler<ConversationRequest, GatewayResponse> {
+public class GetConversationHandler implements RequestHandler<Conversation, GatewayResponse> {
     private AmazonDynamoDBClient client;
     private String DB_MESSAGES_TABLE_NAME = "Messages";
     private Regions REGION = Regions.EU_WEST_1;
 
     @Override
-    public GatewayResponse handleRequest(ConversationRequest conversationRequest, Context context)
+    public GatewayResponse handleRequest(Conversation conversation, Context context)
     {
         // Create response object
         GatewayResponse response;
@@ -39,8 +38,8 @@ public class GetConversationHandler implements RequestHandler<ConversationReques
             // Use hashmap to map them
             Map<String, AttributeValue> expressionAttributeValues =
                     new HashMap<String, AttributeValue>();
-            expressionAttributeValues.put(":id1", new AttributeValue().withS(conversationRequest.getUserId1()));
-            expressionAttributeValues.put(":id2", new AttributeValue().withS(conversationRequest.getUserId2()));
+            expressionAttributeValues.put(":id1", new AttributeValue().withS(conversation.getUserId1()));
+            expressionAttributeValues.put(":id2", new AttributeValue().withS(conversation.getUserId2()));
 
             // Build filter expression
             String filterExpression = "(senderUserId = :id1 AND recipientUserId = :id2)"
