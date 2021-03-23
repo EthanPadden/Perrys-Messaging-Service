@@ -49,7 +49,7 @@ public class UpdateMessageHandler implements RequestHandler<Message, GatewayResp
 
             // Cannot use literals in update expression
             // Use value map to map values
-            String updateExpn = "set (body = :b AND timestamp = :t)";
+            String updateExpn = "set body = :b, lastUpdated = :t";
             ValueMap valueMap = new ValueMap()
                     .withString(":b", message.getBody())
                     .withNumber(":t", timestamp);
@@ -65,7 +65,7 @@ public class UpdateMessageHandler implements RequestHandler<Message, GatewayResp
             table.updateItem(updateItemSpec);
 
             // Set new timestamp of input message
-            message.setTimestamp(timestamp);
+            message.setLastUpdated(timestamp);
 
             response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {

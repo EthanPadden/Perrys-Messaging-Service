@@ -11,7 +11,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.perrys.Constants;
 import com.perrys.GatewayResponse;
 import com.perrys.DBObjects.Message;
-import com.sun.org.apache.bcel.internal.Const;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -55,13 +54,13 @@ public class CreateMessageHandler implements RequestHandler<Message, GatewayResp
 
             // Set the ID and timestamp of the input object
             message.setMessageId(uuid);
-            message.setTimestamp(timestamp);
+            message.setLastUpdated(timestamp);
 
             Item newMessageDBItem = new Item()
                     .withPrimaryKey("messageId", uuid)
                     .withString("senderUserId", message.getSenderUserId())
                     .withString("recipientUserId", message.getRecipientUserId())
-                    .withNumber("timestamp", timestamp)
+                    .withNumber("lastUpdated", timestamp)
                     .withString("body", message.getBody());
 
             // Put item into table

@@ -58,14 +58,14 @@ public class GetConversationHandler implements RequestHandler<Conversation, Gate
             for (Map<String, AttributeValue> item : items) {
                 try {
                     String messageId = item.get("messageId").getS();
-                    String timestamp = item.get("timestamp").getN();
+                    String timestamp = item.get("lastUpdated").getN();
                     String body = item.get("body").getS();
                     String recipientUserId = item.get("recipientUserId").getS();
                     String senderUserId = item.get("senderUserId").getS();
 
                     JsonObject jsonMessage = new JsonObject();
                     jsonMessage.addProperty("messageId", messageId);
-                    jsonMessage.addProperty("timestamp", timestamp);
+                    jsonMessage.addProperty("lastUpdated", timestamp);
                     jsonMessage.addProperty("body", body);
                     jsonMessage.addProperty("recipientUserId", recipientUserId);
                     jsonMessage.addProperty("senderUserId", senderUserId);

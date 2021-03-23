@@ -44,14 +44,14 @@ public class GetMessagesHandler implements RequestHandler<Object, GatewayRespons
             for (Map<String, AttributeValue> item : items) {
                 try {
                     String messageId = item.get("messageId").getS();
-                    String timestamp = item.get("timestamp").getN();
+                    String timestamp = item.get("lastUpdated").getN();
                     String body = item.get("body").getS();
                     String recipientUserId = item.get("recipientUserId").getS();
                     String senderUserId = item.get("senderUserId").getS();
 
                     JsonObject jsonMessage = new JsonObject();
                     jsonMessage.addProperty("messageId", messageId);
-                    jsonMessage.addProperty("timestamp", timestamp);
+                    jsonMessage.addProperty("lastUpdated", timestamp);
                     jsonMessage.addProperty("body", body);
                     jsonMessage.addProperty("recipientUserId", recipientUserId);
                     jsonMessage.addProperty("senderUserId", senderUserId);
@@ -63,7 +63,7 @@ public class GetMessagesHandler implements RequestHandler<Object, GatewayRespons
                 }
             }
 
-            response = new GatewayResponse(jsonMessageList.toString(), 200);
+            response = new GatewayResponse(jsonMessageList, 200);
         } catch (Exception e) {
             response = new GatewayResponse("There was an error accessing the database", 500);
         }

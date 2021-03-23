@@ -5,7 +5,7 @@ public class Message {
     private String recipientUserId;
     private String body;
     private String messageId;
-    private long timestamp;
+    private long lastUpdated;
 
     public Message()
     {
@@ -51,13 +51,13 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public long getTimestamp()
+    public long getLastUpdated()
     {
-        return timestamp;
+        return lastUpdated;
     }
 
-    public void setTimestamp(long timestamp)
+    public void setLastUpdated(long lastUpdated)
     {
-        this.timestamp = timestamp;
+        this.lastUpdated = lastUpdated;
     }
 }
