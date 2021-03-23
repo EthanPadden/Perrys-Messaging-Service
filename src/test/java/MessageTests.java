@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)public class MessageTests {
+public class MessageTests {
     @Test
     public void CRUDMessageSuccess()
     {
