@@ -19,8 +19,8 @@ public class UserRequestTests {
     public void createUserSuccess()
     {
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new user object to insert into the database
         User userRequest = new User();
@@ -61,8 +61,8 @@ public class UserRequestTests {
     @Test
     public void createUserInvalidUsername()
     {
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         CreateUserHandler createUserHandler = new CreateUserHandler();
 
@@ -85,8 +85,8 @@ public class UserRequestTests {
     @Test
     public void getUsersSuccess()
     {
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         GetUsersHandler getUsersHandler = new GetUsersHandler();
 //
