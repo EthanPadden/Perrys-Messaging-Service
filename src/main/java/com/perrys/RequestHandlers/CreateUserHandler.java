@@ -27,21 +27,17 @@ public class CreateUserHandler implements RequestHandler<User, GatewayResponse> 
 
         try {
             // Validate input
-            if(user.getUsername() == null) throw new IllegalArgumentException();
-            if(user.getUsername().compareTo("") == 0) throw new IllegalArgumentException();
+            if (user.getUsername() == null) throw new IllegalArgumentException();
+            if (user.getUsername().compareTo("") == 0) throw new IllegalArgumentException();
 
-            // Initialise DynamoDB client
+            // Initialise DynamoDB client and get table
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             client.setRegion(Region.getRegion(REGION));
             this.dynamoDB = new DynamoDB(client);
-
-            // Get the table from the DB object
             Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
 
-            // Generate a random UUID as a string
+            // Generate a random UUID as a string and set as the object ID to be returned
             String uuid = UUID.randomUUID().toString();
-
-            // Set the ID of the input object
             user.setUserId(uuid);
 
             // Create DB item object
@@ -52,7 +48,7 @@ public class CreateUserHandler implements RequestHandler<User, GatewayResponse> 
             // Put item into table
             table.putItem(newUserDBItem);
 
-            // Return the newly created user
+            // Return updated user object
             response = new GatewayResponse(user, 200);
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse(Constants.MESSAGE_INVALID_INPUT, 400);

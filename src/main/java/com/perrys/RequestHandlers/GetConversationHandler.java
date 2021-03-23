@@ -81,7 +81,7 @@ public class GetConversationHandler implements RequestHandler<Conversation, Gate
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse("There was an error in the input", 400);
         } catch (AmazonDynamoDBException e) {
-            if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
+            if (e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
                 response = new GatewayResponse("There was an error in the input", 400);
             } else {
                 response = new GatewayResponse("There was an error accessing the database", 500);
