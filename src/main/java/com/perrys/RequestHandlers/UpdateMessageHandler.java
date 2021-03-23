@@ -11,6 +11,7 @@ import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.perrys.DBObjects.Message;
+import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 
 import java.sql.Timestamp;
@@ -69,15 +70,15 @@ public class UpdateMessageHandler implements RequestHandler<Message, GatewayResp
 
             response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {
-            response = new GatewayResponse("There was an error in the input", 400);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
         }  catch (AmazonDynamoDBException e) {
             if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
-                response = new GatewayResponse("There was an error in the input", 400);
+                response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
             } else {
-                response = new GatewayResponse("There was an error accessing the database", 500);
+                response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
             }
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database: " + e.getClass(), 500);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }
 
         return response;

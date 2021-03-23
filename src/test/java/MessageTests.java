@@ -1,12 +1,11 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.perrys.Constants;
+import com.perrys.ErrorMessages;
 import com.perrys.DBObjects.Message;
 import com.perrys.GatewayResponse;
 import com.perrys.RequestHandlers.*;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -17,8 +16,8 @@ import org.junit.jupiter.api.TestMethodOrder;
     {
         /** Create message test */
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new message object to insert into the database
         Message messageRequest = new Message();
@@ -117,8 +116,8 @@ import org.junit.jupiter.api.TestMethodOrder;
     public void createMessageInvalid() {
         /** Create message test */
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new message object to insert into the database
         Message messageNoSender = new Message();
@@ -146,17 +145,17 @@ import org.junit.jupiter.api.TestMethodOrder;
         Assert.assertEquals(new Integer(400), responseNoBody.getStatusCode());
 
         // Verify message properties returned
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
     }
 
     @Test
     public void updateMessageInvalid() {
         /** Create message */
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new message object to insert into the database
         Message messageRequest = new Message();
@@ -193,8 +192,8 @@ import org.junit.jupiter.api.TestMethodOrder;
         Assert.assertEquals(new Integer(400), responseNoBody.getStatusCode());
 
         // Verify message properties returned
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
     }
 }

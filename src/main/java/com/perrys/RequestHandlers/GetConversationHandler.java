@@ -11,6 +11,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 import com.perrys.DBObjects.Conversation;
 
@@ -79,15 +80,15 @@ public class GetConversationHandler implements RequestHandler<Conversation, Gate
 
             response = new GatewayResponse(jsonMessageList.toString(), 200);
         } catch (IllegalArgumentException e) {
-            response = new GatewayResponse("There was an error in the input", 400);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
         } catch (AmazonDynamoDBException e) {
             if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
-                response = new GatewayResponse("There was an error in the input", 400);
+                response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
             } else {
-                response = new GatewayResponse("There was an error accessing the database", 500);
+                response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
             }
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database", 500);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }
 
         return response;

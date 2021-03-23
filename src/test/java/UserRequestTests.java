@@ -2,7 +2,7 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.perrys.Constants;
+import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 import com.perrys.RequestHandlers.CreateUserHandler;
 import com.perrys.RequestHandlers.GetUsersHandler;
@@ -19,8 +19,8 @@ public class UserRequestTests {
     public void createUserSuccess()
     {
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new user object to insert into the database
         User userRequest = new User();
@@ -61,8 +61,8 @@ public class UserRequestTests {
     @Test
     public void createUserInvalidUsername()
     {
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         CreateUserHandler createUserHandler = new CreateUserHandler();
 
@@ -74,19 +74,19 @@ public class UserRequestTests {
         GatewayResponse response = createUserHandler.handleRequest(userRequestUsernameNull, null);
 
         Assert.assertEquals(new Integer(400), response.getStatusCode());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, response.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, response.getBody());
 
         response = createUserHandler.handleRequest(userRequestUsernameEmpty, null);
 
         Assert.assertEquals(new Integer(400), response.getStatusCode());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, response.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, response.getBody());
     }
 
     @Test
     public void getUsersSuccess()
     {
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         GetUsersHandler getUsersHandler = new GetUsersHandler();
 //
@@ -97,6 +97,6 @@ public class UserRequestTests {
         // Can only be true if there are users in the database
         JsonArray jsonArray = (JsonArray) response.getBody();
         Assert.assertNotEquals(0, jsonArray.size());
-//        Assert.assertEquals(Constants.MESSAGE_USER_CREATED, response.getBody());
+//        Assert.assertEquals(ErrorMessages.MESSAGE_USER_CREATED, response.getBody());
     }
 }

@@ -10,6 +10,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
 
             response = new GatewayResponse(jsonUsersList, 200);
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database", 500);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }
 
         return response;
