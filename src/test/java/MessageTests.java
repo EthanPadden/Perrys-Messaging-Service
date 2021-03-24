@@ -1,6 +1,7 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.perrys.ErrorMessages;
 import com.perrys.DBObjects.Message;
 import com.perrys.GatewayResponse;
@@ -44,11 +45,12 @@ public class MessageTests {
 
         Assert.assertEquals(new Integer(200), response.getStatusCode());
 
-        JsonArray jsonArray = (JsonArray) response.getBody();
+        String jsonStr = (String) response.getBody();
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jsonArray = jsonParser.parse(jsonStr).getAsJsonArray();
         Assert.assertNotEquals(0, jsonArray.size());
 
         // Verify message is added
-        // TODO: compare fields
         boolean messageExists = false;
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -97,10 +99,10 @@ public class MessageTests {
         Assert.assertEquals(new Integer(200), response.getStatusCode());
 
         // Can only be true if there are messages in the database
-        jsonArray = (JsonArray) response.getBody();
+        jsonStr = (String) response.getBody();
+        jsonArray = jsonParser.parse(jsonStr).getAsJsonArray();
 
         // Verify message is added
-        // TODO: compare fields
         messageExists = false;
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();

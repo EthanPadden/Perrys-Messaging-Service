@@ -64,7 +64,7 @@ public class GetMessagesHandler implements RequestHandler<Object, GatewayRespons
                 }
             }
 
-            response = new GatewayResponse(jsonMessageList, 200);
+            response = new GatewayResponse(jsonMessageList.toString(), 200);
         } catch (Exception e) {
             response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }

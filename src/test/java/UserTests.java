@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 import com.perrys.RequestHandlers.CreateUserHandler;
@@ -103,7 +104,9 @@ public class UserTests {
         Assert.assertEquals(new Integer(200), response.getStatusCode());
 
         // Can only be true if there are users in the database
-        JsonArray jsonArray = (JsonArray) response.getBody();
+        String jsonStr = (String) response.getBody();
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jsonArray = jsonParser.parse(jsonStr).getAsJsonArray();
         Assert.assertNotEquals(0, jsonArray.size());
     }
 

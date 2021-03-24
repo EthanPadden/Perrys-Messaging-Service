@@ -54,7 +54,7 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
                 }
             }
 
-            response = new GatewayResponse(jsonUsersList, 200);
+            response = new GatewayResponse(jsonUsersList.toString(), 200);
         } catch (Exception e) {
             response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }
