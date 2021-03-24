@@ -28,34 +28,29 @@ public class CreateMessageHandler implements RequestHandler<Message, GatewayResp
 
         try {
             // Validate input
-            if(message.getSenderUserId() == null) throw new IllegalArgumentException();
-            if(message.getSenderUserId().compareTo("") == 0) throw new IllegalArgumentException();
-            if(message.getRecipientUserId() == null) throw new IllegalArgumentException();
-            if(message.getRecipientUserId().compareTo("") == 0) throw new IllegalArgumentException();
-            if(message.getBody() == null) throw new IllegalArgumentException();
-            if(message.getBody().compareTo("") == 0) throw new IllegalArgumentException();
+            if (message.getSenderUserId() == null) throw new IllegalArgumentException();
+            if (message.getSenderUserId().compareTo("") == 0) throw new IllegalArgumentException();
+            if (message.getRecipientUserId() == null) throw new IllegalArgumentException();
+            if (message.getRecipientUserId().compareTo("") == 0) throw new IllegalArgumentException();
+            if (message.getBody() == null) throw new IllegalArgumentException();
+            if (message.getBody().compareTo("") == 0) throw new IllegalArgumentException();
 
-            // Initialise DynamoDB client
+            // Initialise DynamoDB client and get table
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             client.setRegion(Region.getRegion(REGION));
             this.dynamoDB = new DynamoDB(client);
-
-            // Get the table from the DB object
             Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
 
-            // Generate a random UUID as a string
+            // Generate a random UUID as a string and get current timestamp
             String uuid = UUID.randomUUID().toString();
-
-            // Get current timestamp
-            // TODO: move to empty constructor and set as member variable?
             Timestamp timestampObj = new Timestamp(System.currentTimeMillis());
             long timestamp = timestampObj.getTime();
 
-
-            // Set the ID and timestamp of the input object
+            // Set the ID and timestamp of the input object set as the object fields to be returned
             message.setMessageId(uuid);
             message.setLastUpdated(timestamp);
 
+            // Create DB item object
             Item newMessageDBItem = new Item()
                     .withPrimaryKey("messageId", uuid)
                     .withString("senderUserId", message.getSenderUserId())
@@ -66,7 +61,7 @@ public class CreateMessageHandler implements RequestHandler<Message, GatewayResp
             // Put item into table
             table.putItem(newMessageDBItem);
 
-            // Return the newly created message
+            // Return updated message object
             response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse(Constants.MESSAGE_INVALID_INPUT, 400);
@@ -76,6 +71,4 @@ public class CreateMessageHandler implements RequestHandler<Message, GatewayResp
 
         return response;
     }
-
-
 }

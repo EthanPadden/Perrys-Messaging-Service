@@ -28,24 +28,22 @@ public class UpdateMessageHandler implements RequestHandler<Message, GatewayResp
 
         try {
             // Validate input
-            if(message.getMessageId() == null) throw new IllegalArgumentException();
-            if(message.getMessageId().compareTo("") == 0) throw new IllegalArgumentException();
-            if(message.getBody() == null) throw new IllegalArgumentException();
-            if(message.getBody().compareTo("") == 0) throw new IllegalArgumentException();
+            if (message.getMessageId() == null) throw new IllegalArgumentException();
+            if (message.getMessageId().compareTo("") == 0) throw new IllegalArgumentException();
+            if (message.getBody() == null) throw new IllegalArgumentException();
+            if (message.getBody().compareTo("") == 0) throw new IllegalArgumentException();
 
-            // Initialise DynamoDB client
+            // Initialise DynamoDB client and get table
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             client.setRegion(Region.getRegion(REGION));
             this.dynamoDB = new DynamoDB(client);
-
-            // Get the table from the DB object
             Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
 
 
-            // Get current timestamp
-            // TODO: move to empty constructor and set as member variable?
+            // Get current timestamp and set for message object to be returned
             Timestamp timestampObj = new Timestamp(System.currentTimeMillis());
             long timestamp = timestampObj.getTime();
+            message.setLastUpdated(timestamp);
 
             // Cannot use literals in update expression
             // Use value map to map values
@@ -64,14 +62,11 @@ public class UpdateMessageHandler implements RequestHandler<Message, GatewayResp
             // Update item in database
             table.updateItem(updateItemSpec);
 
-            // Set new timestamp of input message
-            message.setLastUpdated(timestamp);
-
             response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {
             response = new GatewayResponse("There was an error in the input", 400);
-        }  catch (AmazonDynamoDBException e) {
-            if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
+        } catch (AmazonDynamoDBException e) {
+            if (e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
                 response = new GatewayResponse("There was an error in the input", 400);
             } else {
                 response = new GatewayResponse("There was an error accessing the database", 500);

@@ -17,8 +17,8 @@ import org.junit.jupiter.api.TestMethodOrder;
     {
         /** Create message test */
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new message object to insert into the database
         Message messageRequest = new Message();
@@ -117,8 +117,8 @@ import org.junit.jupiter.api.TestMethodOrder;
     public void createMessageInvalid() {
         /** Create message test */
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new message object to insert into the database
         Message messageNoSender = new Message();
@@ -155,8 +155,8 @@ import org.junit.jupiter.api.TestMethodOrder;
     public void updateMessageInvalid() {
         /** Create message */
         // Set AWS credentials
-        System.setProperty("aws.accessKeyId", "AKIAZ4NUELEBUSWBOGFG");
-        System.setProperty("aws.secretKey", "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");
+        System.setProperty("aws.accessKeyId", Credentials.AWS_ACCESS_KEY_ID);
+        System.setProperty("aws.secretKey", Credentials.AWS_SECRET_KEY);
 
         // Create new message object to insert into the database
         Message messageRequest = new Message();
