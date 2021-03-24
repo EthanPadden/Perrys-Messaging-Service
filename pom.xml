@@ -9,7 +9,6 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>messaging-service-api</name>
-  <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
   <properties>
@@ -30,11 +29,6 @@
   </dependencyManagement>
   <dependencies>
 
-    <!--<dependency>-->
-      <!--<groupId>com.amazonaws</groupId>-->
-      <!--<artifactId>aws-java-sdk-s3</artifactId>-->
-    <!--</dependency>-->
-    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>

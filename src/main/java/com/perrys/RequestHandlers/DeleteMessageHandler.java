@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.perrys.DBObjects.Message;
+import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 
 public class DeleteMessageHandler implements RequestHandler<Message, GatewayResponse> {
@@ -23,10 +24,12 @@ public class DeleteMessageHandler implements RequestHandler<Message, GatewayResp
         GatewayResponse response;
 
         try {
-            // Initialise DynamoDB client and get table
+            // Initialise DynamoDB client
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             client.setRegion(Region.getRegion(REGION));
             this.dynamoDB = new DynamoDB(client);
+
+            // Get the table from the DB object
             Table table = dynamoDB.getTable(DYNAMODB_TABLE_NAME);
 
             // Build deleteItemSpec
@@ -38,15 +41,15 @@ public class DeleteMessageHandler implements RequestHandler<Message, GatewayResp
 
             response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {
-            response = new GatewayResponse("There was an error in the input", 400);
-        } catch (AmazonDynamoDBException e) {
-            if (e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
-                response = new GatewayResponse("There was an error in the input", 400);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
+        }  catch (AmazonDynamoDBException e) {
+            if(e.getMessage().contains("ValidationException") || e.getMessage().contains("invalid value")) {
+                response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
             } else {
-                response = new GatewayResponse("There was an error accessing the database", 500);
+                response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
             }
         } catch (Exception e) {
-            response = new GatewayResponse("There was an error accessing the database: " + e.getClass(), 500);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }
 
         return response;

@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.perrys.Constants;
+import com.perrys.ErrorMessages;
 import com.perrys.GatewayResponse;
 import com.perrys.DBObjects.Message;
 
@@ -64,9 +64,9 @@ public class CreateMessageHandler implements RequestHandler<Message, GatewayResp
             // Return updated message object
             response = new GatewayResponse(message, 200);
         } catch (IllegalArgumentException e) {
-            response = new GatewayResponse(Constants.MESSAGE_INVALID_INPUT, 400);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_INVALID_INPUT, 400);
         } catch (Exception e) {
-            response = new GatewayResponse(Constants.MESSAGE_ERROR_DB_ACCESS, 500);
+            response = new GatewayResponse(ErrorMessages.MESSAGE_ERROR_DB_ACCESS, 500);
         }
 
         return response;

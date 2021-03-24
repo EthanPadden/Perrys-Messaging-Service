@@ -1,17 +1,17 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.perrys.Constants;
+import com.google.gson.JsonParser;
+import com.perrys.ErrorMessages;
 import com.perrys.DBObjects.Message;
 import com.perrys.GatewayResponse;
 import com.perrys.RequestHandlers.*;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)public class MessageTests {
+public class MessageTests {
     @Test
     public void CRUDMessageSuccess()
     {
@@ -45,11 +45,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 
         Assert.assertEquals(new Integer(200), response.getStatusCode());
 
-        JsonArray jsonArray = (JsonArray) response.getBody();
+        String jsonStr = (String) response.getBody();
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jsonArray = jsonParser.parse(jsonStr).getAsJsonArray();
         Assert.assertNotEquals(0, jsonArray.size());
 
         // Verify message is added
-        // TODO: compare fields
         boolean messageExists = false;
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -98,10 +99,10 @@ import org.junit.jupiter.api.TestMethodOrder;
         Assert.assertEquals(new Integer(200), response.getStatusCode());
 
         // Can only be true if there are messages in the database
-        jsonArray = (JsonArray) response.getBody();
+        jsonStr = (String) response.getBody();
+        jsonArray = jsonParser.parse(jsonStr).getAsJsonArray();
 
         // Verify message is added
-        // TODO: compare fields
         messageExists = false;
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -146,9 +147,9 @@ import org.junit.jupiter.api.TestMethodOrder;
         Assert.assertEquals(new Integer(400), responseNoBody.getStatusCode());
 
         // Verify message properties returned
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
     }
 
     @Test
@@ -193,8 +194,8 @@ import org.junit.jupiter.api.TestMethodOrder;
         Assert.assertEquals(new Integer(400), responseNoBody.getStatusCode());
 
         // Verify message properties returned
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
-        Assert.assertEquals(Constants.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoSender.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoRecipient.getBody());
+        Assert.assertEquals(ErrorMessages.MESSAGE_INVALID_INPUT, responseNoBody.getBody());
     }
 }
