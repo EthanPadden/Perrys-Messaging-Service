@@ -4,6 +4,7 @@ public class Conversation {
     private String userId1;
     private String userId2;
 
+    // Constructor needs to be empty for interaction with AWS
     public Conversation()
     {
     }

@@ -7,6 +7,7 @@ public class Message {
     private String messageId;
     private long lastUpdated;
 
+    // Constructor needs to be empty for interaction with AWS
     public Message()
     {
     }

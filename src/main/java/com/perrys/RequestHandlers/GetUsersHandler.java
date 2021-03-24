@@ -50,7 +50,7 @@ public class GetUsersHandler implements RequestHandler<Object, GatewayResponse> 
                 } catch (NullPointerException e) {
                     // In this case, the user has been entered incorrectly into the database
                     // i.e. Some fields are not filled out
-                    // We do not return malformed user
+                    // We do not return malformed users
                 }
             }
 
