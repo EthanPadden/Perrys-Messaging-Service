@@ -168,3 +168,13 @@ Table: Messages
     * The code for CreateUser is specified by the CreateUserHandler class
     * The CreateUser Lambda uses the CreateUserLambda IAM role, which has the following policied attached AWSLambdaBasicExecutionRole and CreateUserPolicy (allowing the PutItem action for the users table).
 ![API example](https://github.com/EthanPadden/Perrys-Messaging-Service/blob/Explanation/APIExample.JPG)
+
+**API Improvements**
+* Do not allow null or empty parameters for all API calls, so that there are no empty fields in any database entries
+* Edit error messages to return which fields were problematic instead of just replying with "Invalid input"
+
+## Integration Tests
+* I did not have time to do good test coverage
+* The User test is closer to the structure of tests that I would implement
+* The message tests hava a large test called CRUDMessageSuccess.  This is not a realistic test case, because if it fails, we do not know which operation is problematic without searching through the code. **The fix here would be to populate the database with sample data and split the test so that one feature/handler is tested in each test**. I did not have time to do this, so the the created message is used to test the update and delete handler (each test should create and delete its own data so we do not end up in a situation where a problem in the createUserHandler causes the test for the deleteUserHandler to fail.
+
