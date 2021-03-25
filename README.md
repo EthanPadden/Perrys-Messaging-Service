@@ -138,3 +138,28 @@ POSSIBLE IMPROVEMENT:
 * An improvement would be to return an error message if this happens
 * Also, there is no need for lastUpdated to be returned (it will always return 0 for this endpoint)
 
+## Overall Structure
+### Database Structure
+Table: Users
+* userId - primary key, string
+* username - string
+
+Table: Messages
+* messageId - primary key, string
+* body - string
+* recipientUserId - string
+* senderUserId - string
+* lastUpdated - number
+
+**Issues and improvements**
+* This solution is not actually scalable, for example:
+    * The conversations handler gets all the messages between 2 users
+    * It does this by scanning the database, filtering to the messages where
+      (recipientUserId = userId1 AND senderUserId = userId2) OR (recipientUserId = userId2 AND senderUserId = userId1) 
+      However, this operation would take a long time when the table contains a lot of messages
+    * **A fix that I did not manage to implement in time would be to have database indexes on the senderUserId and recipientUserID fields. The lastUpdated could be the sort key, keepint the messages sorted by time so that they would not have to be sorted programatically by the client.**
+
+### API structure
+* Each API endpoint is a resource in the AWS API Gateway
+* There is a Lambda function for each, which corresponds to an IAM role, which in turn has an inline policy for access to the resource.
+* The code is uploaded to the S3 service as a .jar file and added from there to the Lambda functions.
