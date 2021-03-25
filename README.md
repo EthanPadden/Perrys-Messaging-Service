@@ -163,3 +163,8 @@ Table: Messages
 * Each API endpoint is a resource in the AWS API Gateway
 * There is a Lambda function for each, which corresponds to an IAM role, which in turn has an inline policy for access to the resource.
 * The code is uploaded to the S3 service as a .jar file and added from there to the Lambda functions.
+* For example:
+    * */users/createuser* calls the CreateUser Lambda
+    * The code for CreateUser is specified by the CreateUserHandler class
+    * The CreateUser Lambda uses the CreateUserLambda IAM role, which has the following policied attached AWSLambdaBasicExecutionRole and CreateUserPolicy (allowing the PutItem action for the users table).
+![API example](https://github.com/EthanPadden/Perrys-Messaging-Service/APIExample.JPG)
