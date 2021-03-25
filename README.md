@@ -167,4 +167,4 @@ Table: Messages
     * */users/createuser* calls the CreateUser Lambda
     * The code for CreateUser is specified by the CreateUserHandler class
     * The CreateUser Lambda uses the CreateUserLambda IAM role, which has the following policied attached AWSLambdaBasicExecutionRole and CreateUserPolicy (allowing the PutItem action for the users table).
-![API example](https://github.com/EthanPadden/Perrys-Messaging-Service/APIExample.JPG)
+![API example](https://github.com/EthanPadden/Perrys-Messaging-Service/blob/Explanation/APIExample.JPG)
