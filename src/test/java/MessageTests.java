@@ -75,6 +75,11 @@ public class MessageTests {
 
         Assert.assertEquals(new Integer(200), response.getStatusCode());
         // Verify message properties returned
+        /**
+         * POSSIBLE IMPROVEMENT:
+         * Have the Message class implement Comparable interface
+         * Override compareTo method and use here
+         * */
         messageResponse = (Message) response.getBody();
         Assert.assertEquals(messageRequest.getMessageId(), messageResponse.getMessageId());
         Assert.assertEquals(messageRequest.getSenderUserId(), messageResponse.getSenderUserId());
