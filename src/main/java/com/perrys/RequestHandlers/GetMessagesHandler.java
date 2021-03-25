@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 public class GetMessagesHandler implements RequestHandler<Object, GatewayResponse> {
-    private DynamoDB dynamoDB;
     private AmazonDynamoDBClient client;
     private String DB_MESSAGES_TABLE_NAME = "Messages";
     private Regions REGION = Regions.EU_WEST_1;
@@ -33,7 +32,6 @@ public class GetMessagesHandler implements RequestHandler<Object, GatewayRespons
             // Initialise DynamoDB client
             client = new AmazonDynamoDBClient();
             client.setRegion(Region.getRegion(REGION));
-            this.dynamoDB = new DynamoDB(client);
 
             // Execute scan request and retrieve a list of DB items
             ScanRequest scanRequest = new ScanRequest().withTableName(DB_MESSAGES_TABLE_NAME);
