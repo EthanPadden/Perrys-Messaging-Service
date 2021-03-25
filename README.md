@@ -175,6 +175,12 @@ Table: Messages
 
 ## Integration Tests
 * I did not have time to do good test coverage
-* The User test is closer to the structure of tests that I would implement
-* The message tests hava a large test called CRUDMessageSuccess.  This is not a realistic test case, because if it fails, we do not know which operation is problematic without searching through the code. **The fix here would be to populate the database with sample data and split the test so that one feature/handler is tested in each test**. I did not have time to do this, so the the created message is used to test the update and delete handler (each test should create and delete its own data so we do not end up in a situation where a problem in the createUserHandler causes the test for the deleteUserHandler to fail.
+* The User tests are closer to the structure of tests that I would implement
+* The message tests have a large test called CRUDMessageSuccess. This is not a realistic test case, because if it fails, we do not know which operation is problematic without searching through the code. **The fix here would be to populate the database with sample data and split the test so that one feature/handler is tested in each test**. For example:
+    * Create test: call createMessageHandler to create the message and interact with the database directly using the DynamoDB library to verify the message is added when the response is recieved
+    * Read test: have 3 sample test messages in the database already. The messageIds for each are stored in the tests. Verify a call to getMessagesHandler returns a list of messages, including the test ones.
+    * Update test: have a sample message in the database with the body "Message 1". For each time the test is run, it should update it by incrementing the body (using string methods) to "Message 2", etc and verify it has been updated by interacting with the database directly.
+    * Delete test: create a message in the database by interacting with it directly. Verify a call to deleteMessageHandler removes it.
+    * Other tests to verify invalid API calls do not allow the operations to be carried out.
+*   I did not have time to do this, so the the created message is used to test the update and delete handler (each test should create and delete its own data so we do not end up in a situation where a problem in the createUserHandler causes the test for the deleteUserHandler to fail.
 
