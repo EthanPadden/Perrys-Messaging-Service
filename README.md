@@ -158,3 +158,8 @@ Table: Messages
       (recipientUserId = userId1 AND senderUserId = userId2) OR (recipientUserId = userId2 AND senderUserId = userId1) 
       However, this operation would take a long time when the table contains a lot of messages
     * **A fix that I did not manage to implement in time would be to have database indexes on the senderUserId and recipientUserID fields. The lastUpdated could be the sort key, keepint the messages sorted by time so that they would not have to be sorted programatically by the client.**
+
+### API structure
+* Each API endpoint is a resource in the AWS API Gateway
+* There is a Lambda function for each, which corresponds to an IAM role, which in turn has an inline policy for access to the resource.
+* The code is uploaded to the S3 service as a .jar file and added from there to the Lambda functions.
