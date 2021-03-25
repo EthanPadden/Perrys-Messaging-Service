@@ -44,7 +44,6 @@ public class UpdateMessageHandler implements RequestHandler<Message, GatewayResp
 
 
             // Get current timestamp
-            // TODO: move to empty constructor and set as member variable?
             Timestamp timestampObj = new Timestamp(System.currentTimeMillis());
             long timestamp = timestampObj.getTime();
 
