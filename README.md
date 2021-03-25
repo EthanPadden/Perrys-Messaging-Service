@@ -97,6 +97,7 @@ POSSIBLE IMPROVEMENT:
 * I did not manage to configure the response properly using the API gateway
 * In some of the other endpoints, this was done using the Lambda proxy
 * However, this endpoint does not use this - resulting in the body being returned as a string of JSON
+* Also, check do users exist in the database with those userIds. If not, return an error message.
 
 *POST   /messages/updatemessage*
 * Parameters: 
@@ -183,4 +184,9 @@ Table: Messages
     * Delete test: create a message in the database by interacting with it directly. Verify a call to deleteMessageHandler removes it.
     * Other tests to verify invalid API calls do not allow the operations to be carried out.
 *   I did not have time to do this, so the the created message is used to test the update and delete handler (each test should create and delete its own data so we do not end up in a situation where a problem in the createUserHandler causes the test for the deleteUserHandler to fail.
+
+## Other Notes
+* The code within the handlers and the unit tests assumes that the calls to the database and request handlers **are synchronous**.
+* I was unsure whether or not this was the case, although the AWS sample code implied that it was.
+* This note is just to say that I recognise that processes such as these can often be asynchronous and I have experience dealing with those kind of calls.
 
