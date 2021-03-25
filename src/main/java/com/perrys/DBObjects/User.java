@@ -30,12 +30,4 @@ public class User {
     {
         this.username = username;
     }
-
-    public JsonObject toJsonObject()
-    {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userId", userId);
-        jsonObject.addProperty("username", username);
-        return jsonObject;
-    }
 }

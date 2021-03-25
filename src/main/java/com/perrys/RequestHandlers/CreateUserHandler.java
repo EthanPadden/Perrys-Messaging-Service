@@ -17,7 +17,7 @@ import java.util.UUID;
 public class CreateUserHandler implements RequestHandler<User, GatewayResponse> {
     private DynamoDB dynamoDB;
     private String DYNAMODB_TABLE_NAME = "Users";
-    private Regions REGION = Regions.EU_WEST_1; // TODO: Update with correct region
+    private Regions REGION = Regions.EU_WEST_1;
 
     @Override
     public GatewayResponse handleRequest(User user, Context context)
